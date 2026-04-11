@@ -279,7 +279,138 @@ function fazerLogin(){
 let email=document.getElementById("email").value;
 let senha=document.getElementById("senha").value;
 
-google.script.run
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+<script>
+
+// COLE SEU CONFIG AQUI
+const firebaseConfig = {
+  apiKey: "SUA_KEY",
+  authDomain: "SEU_DOMINIO",
+  projectId: "SEU_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+
+// LOGIN
+function fazerLogin(){
+
+let email = document.getElementById("email").value;
+let senha = document.getElementById("senha").value;
+
+auth.signInWithEmailAndPassword(email, senha)
+.then(user => {
+
+document.getElementById("login").style.display="none";
+document.getElementById("areaCursos").style.display="block";
+
+document.getElementById("boasVindas").innerText="Bem vindo!";
+
+carregarModulos();
+
+})
+.catch(() => alert("Login inválido"));
+
+}
+
+
+// CADASTRO
+function criarConta(){
+
+let nome = document.getElementById("nomeCadastro").value;
+let email = document.getElementById("emailCadastro").value;
+let senha = document.getElementById("senhaCadastro").value;
+
+auth.createUserWithEmailAndPassword(email, senha)
+.then(() => {
+
+db.collection("usuarios").add({nome,email});
+
+alert("Cadastro realizado!");
+voltarLogin();
+
+})
+.catch(err => alert(err.message));
+
+}
+
+
+// MODULOS
+function carregarModulos(){
+
+db.collection("cursos").get().then(snapshot=>{
+
+let modulos = {};
+let div = document.getElementById("modulos");
+div.innerHTML="";
+
+snapshot.forEach(doc=>{
+let data = doc.data();
+modulos[data.modulo]=true;
+});
+
+Object.keys(modulos).forEach(m=>{
+
+let card=document.createElement("div");
+card.className="moduloCard";
+card.innerText=m;
+
+card.onclick=function(){
+abrirModulo(m);
+}
+
+div.appendChild(card);
+
+});
+
+});
+
+}
+
+
+// AULAS
+function abrirModulo(modulo){
+
+db.collection("cursos")
+.where("modulo","==",modulo)
+.get()
+.then(snapshot=>{
+
+document.getElementById("areaCursos").style.display="none";
+document.getElementById("listaAulas").style.display="block";
+
+document.getElementById("tituloModulo").innerText=modulo;
+
+let div=document.getElementById("aulas");
+div.innerHTML="";
+
+snapshot.forEach(doc=>{
+
+let a = doc.data();
+
+let card=document.createElement("div");
+card.className="aulaCard";
+card.innerText=a.aula;
+
+card.onclick=function(){
+abrirAula(a);
+}
+
+div.appendChild(card);
+
+});
+
+});
+
+}
+
+</script>
 .withSuccessHandler(function(res){
 
 if(res.status){
