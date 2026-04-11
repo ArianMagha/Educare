@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Plataforma de Cursos</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#1b5e20,#2e7d32);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* CONTAINERS */
+
+.container{
+width:420px;
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#1b5e20;
+}
+
+h3{
+margin-top:20px;
+margin-bottom:10px;
+}
+
+/* INPUTS */
+
+input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border-radius:6px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+/* BOTÕES */
+
+button{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+border-radius:6px;
+background:#2e7d32;
+color:white;
+font-size:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#1b5e20;
+transform:scale(1.03);
+}
+
+/* LINKS */
+
+a{
+color:#2e7d32;
+text-decoration:none;
+font-size:14px;
+}
+
+a:hover{
+text-decoration:underline;
+}
+
+/* AREA CURSOS */
+
+#areaCursos{
+width:900px;
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+#boasVindas{
+text-align:center;
+margin-bottom:20px;
+color:#1b5e20;
+}
+
+/* MODULOS */
+
+#modulos{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.moduloCard{
+background:#f4f4f4;
+padding:20px;
+border-radius:10px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+font-weight:500;
+}
+
+.moduloCard:hover{
+background:#2e7d32;
+color:white;
+transform:translateY(-5px);
+}
+
+/* AULAS */
+
+#aulas{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.aulaCard{
+background:#f4f4f4;
+padding:20px;
+border-radius:10px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+}
+
+.aulaCard:hover{
+background:#1b5e20;
+color:white;
+transform:translateY(-5px);
+}
+
+/* PAGINA AULA */
+
+#aula{
+width:900px;
+background:white;
+padding:40px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+#descricaoAula{
+margin-bottom:20px;
+font-size:16px;
+}
+
+iframe{
+width:100%;
+height:450px;
+border-radius:10px;
+}
+
+/* BOTAO VOLTAR */
+
+.voltar{
+background:#555;
+margin-top:20px;
+}
+
+.voltar:hover{
+background:#333;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="login" class="container">
+
+<h2>Login</h2>
+
+<input id="email" placeholder="Email">
+<input id="senha" type="password" placeholder="Senha">
+
+<button onclick="fazerLogin()">Entrar</button>
+
+<p style="text-align:center;margin-top:15px;">
+<a href="#" onclick="abrirCadastro()">Criar conta</a>
+</p>
+
+</div>
+
+
+<!-- CADASTRO -->
+
+<div id="cadastro" class="container" style="display:none;">
+
+<h2>Criar Conta</h2>
+
+<input id="nomeCadastro" placeholder="Nome">
+<input id="emailCadastro" placeholder="Email">
+<input id="senhaCadastro" type="password" placeholder="Senha">
+
+<button onclick="criarConta()">Cadastrar</button>
+
+<p style="text-align:center;margin-top:15px;">
+<a href="#" onclick="voltarLogin()">Voltar</a>
+</p>
+
+</div>
+
+
+<!-- AREA DE MODULOS -->
+
+<div id="areaCursos" style="display:none;">
+
+<h2 id="boasVindas"></h2>
+
+<h3>Módulos disponíveis</h3>
+
+<div id="modulos"></div>
+
+<br>
+
+<button class="voltar" onclick="voltarLogin()">Sair</button>
+
+</div>
+
+
+<!-- LISTA DE AULAS -->
+
+<div id="listaAulas" style="display:none;" class="container">
+
+<h2 id="tituloModulo"></h2>
+
+<div id="aulas"></div>
+
+<button class="voltar" onclick="voltarModulos()">Voltar</button>
+
+</div>
+
+
+<!-- AULA -->
+
+<div id="aula" style="display:none;">
+
+<h2>Aula</h2>
+
+<p id="descricaoAula"></p>
+
+<iframe id="videoAula" frameborder="0" allowfullscreen></iframe>
+
+<button class="voltar" onclick="voltarAulas()">Voltar</button>
+
+</div>
+
+
+<script>
+
+// LOGIN
+function fazerLogin(){
+
+let email=document.getElementById("email").value;
+let senha=document.getElementById("senha").value;
+
+google.script.run
+.withSuccessHandler(function(res){
+
+if(res.status){
+
+document.getElementById("login").style.display="none";
+document.getElementById("areaCursos").style.display="block";
+
+document.getElementById("boasVindas").innerText="Bem vindo, "+res.nome;
+
+carregarModulos();
+
+}else{
+
+alert("Login inválido");
+
+}
+
+})
+.login(email,senha);
+
+}
+
+
+// CADASTRAR
+function criarConta(){
+
+let nome=document.getElementById("nomeCadastro").value;
+let email=document.getElementById("emailCadastro").value;
+let senha=document.getElementById("senhaCadastro").value;
+
+google.script.run
+.withSuccessHandler(function(res){
+
+alert(res);
+voltarLogin();
+
+})
+.cadastrar(nome,email,senha);
+
+}
+
+
+// TELAS
+
+function abrirCadastro(){
+
+document.getElementById("login").style.display="none";
+document.getElementById("cadastro").style.display="block";
+
+}
+
+function voltarLogin(){
+
+document.getElementById("cadastro").style.display="none";
+document.getElementById("areaCursos").style.display="none";
+document.getElementById("listaAulas").style.display="none";
+document.getElementById("aula").style.display="none";
+document.getElementById("login").style.display="block";
+
+}
+
+
+// MODULOS
+
+function carregarModulos(){
+
+google.script.run
+.withSuccessHandler(function(lista){
+
+let div=document.getElementById("modulos");
+
+div.innerHTML="";
+
+lista.forEach(function(m){
+
+let card=document.createElement("div");
+
+card.className="moduloCard";
+
+card.innerText=m.modulo;
+
+card.onclick=function(){
+
+abrirModulo(m.modulo);
+
+}
+
+div.appendChild(card);
+
+});
+
+})
+.listarModulos();
+
+}
+
+
+// ABRIR MODULO
+
+function abrirModulo(modulo){
+
+google.script.run
+.withSuccessHandler(function(lista){
+
+document.getElementById("areaCursos").style.display="none";
+document.getElementById("listaAulas").style.display="block";
+
+document.getElementById("tituloModulo").innerText=modulo;
+
+let div=document.getElementById("aulas");
+
+div.innerHTML="";
+
+lista.forEach(function(a){
+
+let card=document.createElement("div");
+
+card.className="aulaCard";
+
+card.innerText=a.aula;
+
+card.onclick=function(){
+
+abrirAula(a);
+
+}
+
+div.appendChild(card);
+
+});
+
+})
+.listarAulas(modulo);
+
+}
+
+
+// ABRIR AULA
+
+function abrirAula(aula){
+
+document.getElementById("listaAulas").style.display="none";
+document.getElementById("aula").style.display="block";
+
+document.getElementById("descricaoAula").innerText=aula.descricao;
+
+document.getElementById("videoAula").src=aula.link;
+
+}
+
+
+// VOLTAR
+
+function voltarModulos(){
+
+document.getElementById("listaAulas").style.display="none";
+document.getElementById("areaCursos").style.display="block";
+
+}
+
+function voltarAulas(){
+
+document.getElementById("aula").style.display="none";
+document.getElementById("listaAulas").style.display="block";
+
+}
+
+</script>
+
+</body>
+</html>
