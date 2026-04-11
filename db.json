@@ -1,1 +1,29 @@
-
+{
+  "usuarios": [
+    {
+      "nome": "Admin",
+      "email": "admin@gmail.com",
+      "senha": "123"
+    }
+  ],
+  "cursos": [
+    {
+      "modulo": "HTML",
+      "aula": "Introdução",
+      "descricao": "Primeira aula de HTML",
+      "link": "https://www.youtube.com/embed/dD2EISBDjWM"
+    },
+    {
+      "modulo": "HTML",
+      "aula": "Tags básicas",
+      "descricao": "Aprendendo as primeiras tags",
+      "link": "https://www.youtube.com/embed/UB1O30fR-EE"
+    },
+    {
+      "modulo": "JavaScript",
+      "aula": "Variáveis",
+      "descricao": "Introdução ao JS",
+      "link": "https://www.youtube.com/embed/W6NZfCO5SIk"
+    }
+  ]
+}
